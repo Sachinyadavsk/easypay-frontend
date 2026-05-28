@@ -30,7 +30,7 @@ const Dashboard = () => {
     const handleFeatureClick = (link, button) => {
         if (!user) {
             alert("Please login to access this feature.");
-            window.location.href = "/login";
+            window.location.href = "/mpin/login";
         } else {
             window.location.href = link;
         }
