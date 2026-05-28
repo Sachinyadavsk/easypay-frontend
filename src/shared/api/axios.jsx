@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "https://easypay-gmob.vercel.app/api", // change if needed
+    baseURL: "https://easypay-backend-oy3i.onrender.com/api", // change if needed
     //  baseURL: "http://localhost:5000/api", // change if needed
 });
 
