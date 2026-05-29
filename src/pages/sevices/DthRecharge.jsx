@@ -171,7 +171,7 @@ const DthRecharge = () => {
         try {
             setLoading(true)
             const currentBalance = parseFloat(user?.balance || 0)
-            const rechargeAmount = parseFloat(form.amount || 0)
+            const addAmount = parseFloat(form.amount || 0)
             const token = user?.token || localStorage.getItem('token')
 
             // API PAYLOAD
