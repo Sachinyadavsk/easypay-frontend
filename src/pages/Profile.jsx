@@ -12,6 +12,128 @@ const Profile = () => {
   const [success, setSuccess] = useState(null);
   const [showQr, setShowQr] = useState(false);
   const navigate = useNavigate();
+
+  const [notifications, setNotifications] = useState(
+    user?.notifications ?? true
+  )
+
+  const [language, setLanguage] = useState(
+    user?.language || 'English'
+  )
+
+  const [privacy, setPrivacy] = useState(
+    user?.privacy || 'Public'
+  )
+  const updateNotifications = async () => {
+    try {
+      const token =
+        user?.token ||
+        localStorage.getItem('token')
+
+      const newValue = !notifications
+
+      setNotifications(newValue)
+
+      await API.put(
+        '/auth/user/notification-settings',
+        {
+          notifications: newValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      const updatedUser = {
+        ...user,
+        notifications: newValue,
+      }
+
+      setUser(updatedUser)
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify(updatedUser)
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const updateLanguage = async (value) => {
+    try {
+      setLanguage(value)
+
+      const token =
+        user?.token ||
+        localStorage.getItem('token')
+
+      await API.put(
+        '/auth/user/language',
+        {
+          language: value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      const updatedUser = {
+        ...user,
+        language: value,
+      }
+
+      setUser(updatedUser)
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify(updatedUser)
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const updatePrivacy = async (value) => {
+    try {
+      setPrivacy(value)
+
+      const token =
+        user?.token ||
+        localStorage.getItem('token')
+
+      await API.put(
+        '/auth/user/privacy',
+        {
+          privacy: value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      const updatedUser = {
+        ...user,
+        privacy: value,
+      }
+
+      setUser(updatedUser)
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify(updatedUser)
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const [form, setForm] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -22,7 +144,7 @@ const Profile = () => {
   const qrValue = user?.upiId && user.upiId.includes('@')
     ? user.upiId
     : 'example@upi';
-    
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -261,6 +383,130 @@ const Profile = () => {
             </button>
 
           </form>
+
+          <div className="mt-10 space-y-5">
+
+            <h2 className="text-2xl font-bold">
+              Profile Settings
+            </h2>
+
+            {/* Privacy */}
+
+            <div className="bg-white border rounded-3xl p-5 shadow-sm">
+
+              <h3 className="font-bold mb-3">
+                Privacy Settings
+              </h3>
+
+              <select
+                value={privacy}
+                onChange={(e) =>
+                  updatePrivacy(e.target.value)
+                }
+                className="w-full border rounded-2xl p-4"
+              >
+                <option value="Public">
+                  Public
+                </option>
+
+                <option value="Private">
+                  Private
+                </option>
+
+                <option value="Friends">
+                  Friends Only
+                </option>
+
+              </select>
+
+            </div>
+
+            {/* Notifications */}
+
+            <div className="bg-white border rounded-3xl p-5 shadow-sm">
+
+              <div className="flex items-center justify-between">
+
+                <div>
+
+                  <h3 className="font-bold">
+                    Notifications
+                  </h3>
+
+                  <p className="text-gray-500 text-sm">
+                    Cashback, Offers & Alerts
+                  </p>
+
+                </div>
+
+                <button
+                  onClick={updateNotifications}
+                  className={`w-14 h-8 rounded-full relative ${notifications
+                      ? 'bg-green-500'
+                      : 'bg-gray-300'
+                    }`}
+                >
+                  <span
+                    className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all ${notifications
+                        ? 'right-1'
+                        : 'left-1'
+                      }`}
+                  />
+                </button>
+
+              </div>
+
+            </div>
+
+            {/* Language */}
+
+            <div className="bg-white border rounded-3xl p-5 shadow-sm">
+
+              <h3 className="font-bold mb-3">
+                Language
+              </h3>
+
+              <select
+                value={language}
+                onChange={(e) =>
+                  updateLanguage(e.target.value)
+                }
+                className="w-full border rounded-2xl p-4"
+              >
+                <option>English</option>
+                <option>Hindi</option>
+                <option>Bengali</option>
+                <option>Gujarati</option>
+                <option>Marathi</option>
+                <option>Tamil</option>
+                <option>Telugu</option>
+              </select>
+
+            </div>
+
+            {/* KYC Status */}
+
+            <div className="bg-gradient-to-r from-[#5F259F] to-indigo-600 text-white rounded-3xl p-6">
+
+              <h3 className="text-xl font-bold">
+                KYC Status
+              </h3>
+
+              <p className="mt-2 opacity-90">
+                Status:
+                {' '}
+                {user?.kycStatus || 'Pending'}
+              </p>
+
+              {user?.kycStatus !== 'Verified' && (
+                <button className="mt-4 bg-white text-[#5F259F] px-5 py-2 rounded-xl font-semibold">
+                  Complete KYC
+                </button>
+              )}
+
+            </div>
+
+          </div>
 
         </div>
 

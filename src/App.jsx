@@ -32,6 +32,13 @@ import TravelTrain from './pages/travel/TravelTrain'
 import TravelBus from './pages/travel/TravelBus'
 import Logout from './components/auth/Logout';
 
+import PaymentSettings from './components/settings/PaymentSettings';
+import AutomaticPayments from './components/settings/AutomaticPayments';
+import OrdersBookings from './components/settings/OrdersBookings';
+import HelpSupport from './components/settings/HelpSupport';
+import ReferEarn from './components/settings/ReferEarn';
+import Settings from './components/settings/Settings';
+
 const App = () => {
   return (
     <Routes>
@@ -73,6 +80,14 @@ const App = () => {
         <Route path="/travel-flight" element={<TravelFlight />} />
         <Route path="/travel-train" element={<TravelTrain />} />
         <Route path="/travel-bus" element={<TravelBus />} />
+
+        {/* User Settings */}
+        <Route path="/payment-settings" element={<PaymentSettings />} />
+        <Route path="/automatic-payments" element={<AutomaticPayments />} />
+        <Route path="/orders" element={<OrdersBookings />} />
+        <Route path="/help-support" element={<HelpSupport />} />
+        <Route path="/refer-earn" element={<ReferEarn />} />
+        <Route path="/settings" element={<Settings />} />
 
       </Route>
     </Routes>
