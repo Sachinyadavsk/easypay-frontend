@@ -2,7 +2,7 @@ import React from 'react';
 import WalletCard from "../components/WalletCard";
 import ServiceCard from "../components/ServiceCard";
 import TransactionTable from "../components/TransactionTable";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../shared/context/AuthContext';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -15,18 +15,22 @@ import TravelData from '../static-api/TravelData.jsx';
 
 const Home = () => {
   const { user, setUser } = useAuth();
+  const navigate = useNavigate();
 
   // using  the service api to fetch the services and display on the home page
   //  set condition where if user is not logged in, redirect to login page button and link click check login status and if not logged in, redirect to login page
   // only button click and link click check login status and if not logged in, redirect to login page all features display but when click on any feature check login status and if not logged in, redirect to login page
-  const handleFeatureClick = (link, button) => {
+  const handleFeatureClick = (e, link) => {
+    e.preventDefault();
+
     if (!user) {
       alert("Please login to access this feature.");
-      window.location.href = "/mpin/login";
-    } else {
-      window.location.href = link;
+      navigate("/mpin/login");
+      return;
     }
-  }
+
+    navigate(link);
+  };
   return (
     <div className="max-w-7xl mx-auto p-4 space-y-10">
       {/* Wallet Card */}
@@ -57,14 +61,15 @@ const Home = () => {
             Money Transfers
           </h2>
 
-          <button onClick={() => handleFeatureClick("/transfer-to-mobile", "View All")} className="text-[#5F259F] font-bold">
+          <button onClick={(e) => handleFeatureClick(e, "/transfer-to-mobile")} className="text-[#5F259F] font-bold">
             View All
           </button>
+          
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {quickActions.map((item, index) => (
-            <Link to={item.link} key={index} onClick={() => handleFeatureClick(item.link, item.title)}>
+            <Link to={item.link} key={index} onClick={(e) => handleFeatureClick(e, item.link)}>
               <div
                 key={index}
                 className="bg-gray-100 rounded-3xl p-6 text-center hover:shadow-lg transition cursor-pointer"
@@ -89,7 +94,7 @@ const Home = () => {
             Recharge & Pay Bills
           </h2>
 
-          <button onClick={() => handleFeatureClick("/recharge", "More")} className="text-[#5F259F] font-bold">
+          <button onClick={(e) => handleFeatureClick(e, "/mobile-recharge")} className="text-[#5F259F] font-bold">
             More
           </button>
         </div>
@@ -100,7 +105,7 @@ const Home = () => {
               <ServiceCard
                 key={index}
                 link={ser.link}
-                onClick={() => handleFeatureClick(ser.link, ser.title)}
+                onClick={(e) => handleFeatureClick(e, ser.link)}
                 icon={ser.icon}
                 title={ser.title}
               />
@@ -118,7 +123,7 @@ const Home = () => {
             Travel & Tickets
           </h2>
 
-          <button onClick={() => handleFeatureClick("/recharge", "More")} className="text-[#5F259F] font-bold">
+          <button onClick={(e) => handleFeatureClick(e, "/travel-train")} className="text-[#5F259F] font-bold">
             More
           </button>
         </div>
@@ -129,7 +134,7 @@ const Home = () => {
               <ServiceCard
                 key={index}
                 link={ser.link}
-                onClick={() => handleFeatureClick(ser.link, ser.title)}
+                onClick={(e) => handleFeatureClick(e, ser.link)}
                 icon={ser.icon}
                 title={ser.title}
               />
@@ -154,7 +159,7 @@ const Home = () => {
               Use PhonePe for recharge and utility bills to earn exciting rewards.
             </p>
 
-            <button onClick={() => handleFeatureClick("/cashback", "Explore Offers")} className="bg-white text-pink-600 px-8 py-4 rounded-2xl font-bold shadow-lg">
+            <button onClick={(e) => handleFeatureClick(e, "/cashback")} className="bg-white text-pink-600 px-8 py-4 rounded-2xl font-bold shadow-lg">
               Explore Offers
             </button>
           </div>

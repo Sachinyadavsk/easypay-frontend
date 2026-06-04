@@ -16,25 +16,29 @@ import ServiceCard from "../ServiceCard";
 import quickActions from '../../static-api/transfers.jsx';
 import sliderData from '../../static-api/sliderData.jsx';
 import services from '../../static-api/ServiceData.jsx';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TravelData from "../../static-api/TravelData.jsx";
 
 
 const Dashboard = () => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     // using  the service api to fetch the services and display on the home page
     //  set condition where if user is not logged in, redirect to login page button and link click check login status and if not logged in, redirect to login page
     // only button click and link click check login status and if not logged in, redirect to login page all features display but when click on any feature check login status and if not logged in, redirect to login page
-    const handleFeatureClick = (link, button) => {
+    const handleFeatureClick = (e, link) => {
+        e.preventDefault();
+
         if (!user) {
             alert("Please login to access this feature.");
-            window.location.href = "/mpin/login";
-        } else {
-            window.location.href = link;
+            navigate("/mpin/login");
+            return;
         }
-    }
+
+        navigate(link);
+    };
 
     if (!user) {
         return <p className="p-6">Loading profile...</p>;
@@ -68,14 +72,14 @@ const Dashboard = () => {
                             Money Transfers
                         </h2>
 
-                        <button onClick={() => handleFeatureClick("/transfer-to-mobile", "View All")} className="text-[#5F259F] font-bold">
+                        <button onClick={(e) => handleFeatureClick(e, "/transfer-to-mobile")} className="text-[#5F259F] font-bold">
                             View All
                         </button>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {quickActions.map((item, index) => (
-                            <Link to={item.link} key={index} onClick={() => handleFeatureClick(item.link, item.title)}>
+                            <Link to={item.link} key={index} onClick={(e) => handleFeatureClick(e, item.link)}>
                                 <div
                                     key={index}
                                     className="bg-gray-100 rounded-3xl p-6 text-center hover:shadow-lg transition cursor-pointer"
@@ -100,7 +104,7 @@ const Dashboard = () => {
                             Recharge & Pay Bills
                         </h2>
 
-                        <button onClick={() => handleFeatureClick("/recharge", "More")} className="text-[#5F259F] font-bold">
+                        <button onClick={(e) => handleFeatureClick(e, "/mobile-recharge")} className="text-[#5F259F] font-bold">
                             More
                         </button>
                     </div>
@@ -111,7 +115,7 @@ const Dashboard = () => {
                                 <ServiceCard
                                     key={index}
                                     link={ser.link}
-                                    onClick={() => handleFeatureClick(ser.link, ser.title)}
+                                    onClick={(e) => handleFeatureClick(e, ser.link)}
                                     icon={ser.icon}
                                     title={ser.title}
                                 />
@@ -129,7 +133,7 @@ const Dashboard = () => {
                             Travel & Tickets
                         </h2>
 
-                        <button onClick={() => handleFeatureClick("/recharge", "More")} className="text-[#5F259F] font-bold">
+                        <button onClick={(e) => handleFeatureClick(e, "/travel-train")} className="text-[#5F259F] font-bold">
                             More
                         </button>
                     </div>
@@ -140,7 +144,7 @@ const Dashboard = () => {
                                 <ServiceCard
                                     key={index}
                                     link={ser.link}
-                                    onClick={() => handleFeatureClick(ser.link, ser.title)}
+                                    onClick={(e) => handleFeatureClick(e, ser.link)}
                                     icon={ser.icon}
                                     title={ser.title}
                                 />
@@ -163,7 +167,7 @@ const Dashboard = () => {
                                 Recharge and pay bills to earn exciting rewards and cashback offers.
                             </p>
 
-                            <button onClick={() => handleFeatureClick("/cashback", "Explore Offers")} className="bg-white text-pink-600 px-8 py-4 rounded-2xl font-bold shadow-lg">
+                            <button onClick={(e) => handleFeatureClick(e, "/cashback")} className="bg-white text-pink-600 px-8 py-4 rounded-2xl font-bold shadow-lg">
                                 Explore Rewards
                             </button>
                         </div>
